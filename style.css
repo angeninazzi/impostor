@@ -1,0 +1,14 @@
+.glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
+.stepper-btn { 
+    width: 45px; height: 45px; 
+    display: flex; align-items: center; justify-content: center; 
+    background: #334155; border-radius: 12px; font-weight: bold; font-size: 1.5rem; 
+}
+.stepper-btn:active { transform: scale(0.9); background: #475569; }
+.category-chip.active { background: #06b6d4 !important; color: #0f172a !important; border-color: #06b6d4 !important; }
+.fade-in { animation: fadeIn 0.3s ease-in; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Fix para iPhone de que los botones no se sientan lentos */
+button { cursor: pointer; touch-action: manipulation; }
+input { -webkit-appearance: none; border-radius: 0; }
