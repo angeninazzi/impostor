@@ -195,11 +195,73 @@ function processResults() {
     showScreen('result');
 }
 
+
 function handlePostResult() {
-    if(document.getElementById('btn-next-action').innerText === "Nueva Partida") location.reload();
-    else {
+    const btnText = document.getElementById('btn-next-action').innerText;
+    
+    if (btnText === "Nueva Partida") {
+        // En lugar de recargar la página, reiniciamos el juego con los mismos nombres
+        resetAndPlayAgain();
+    } else {
+        // "Próxima Ronda" dentro de la misma partida (alguien murió pero el juego sigue)
         const alive = gameState.players.filter(p => p.alive);
         document.getElementById('starter-name').innerText = alive[Math.floor(Math.random() * alive.length)].name;
         showScreen('lobby');
     }
+}
+
+function resetAndPlayAgain() {
+    // 1. Obtenemos los nombres actuales de los objetos de jugadores (vivos o muertos)
+    const currentNames = gameState.players.map(p => p.name);
+    
+    // 2. Limpiamos el estado del juego pero preservamos la configuración
+    gameState = { 
+        players: [], 
+        currentIndex: 0, 
+        secretWord: "", 
+        votes: {}, 
+        totalVotesCast: 0, 
+        actualImpsCount: 0 
+    };
+
+    // 3. Volvemos a ejecutar la lógica de inicio (sorteo de palabra y roles)
+    // Para esto, usamos los nombres que ya teníamos
+    repartirNuevosRoles(currentNames);
+}
+
+function repartirNuevosRoles(names) {
+    // Seleccionamos temas activos
+    const themes = Array.from(document.querySelectorAll('.category-chip.active')).map(b => b.innerText);
+    let pool = themes.flatMap(t => DICCIONARIO[t]);
+    if(DICCIONARIO["Custom"].length > 0) pool = [...pool, ...DICCIONARIO["Custom"]];
+    
+    // Sorteo de palabra
+    gameState.secretWord = pool[Math.floor(Math.random() * pool.length)];
+    
+    // Cantidad de impostores
+    gameState.actualImpsCount = document.getElementById('check-random').checked ? 
+        Math.floor(Math.random() * config.impostors) + 1 : config.impostors;
+    
+    // Mapeo de jugadores y roles
+    gameState.players = names.map(n => ({ name: n, role: 'citizen', alive: true }));
+    let assigned = 0;
+    while(assigned < gameState.actualImpsCount) {
+        let idx = Math.floor(Math.random() * names.length);
+        if(gameState.players[idx].role !== 'impostor') { 
+            gameState.players[idx].role = 'impostor'; 
+            assigned++; 
+        }
+    }
+
+    // Alerta de impostores
+    const alertBox = document.getElementById('total-imps-alert');
+    if(document.getElementById('check-show-count').checked) {
+        alertBox.innerText = `ATENCIÓN: HAY ${gameState.actualImpsCount} IMPOSTOR(ES)`;
+        alertBox.classList.remove('hidden');
+    }
+
+    // Ir a la pantalla de revelación
+    gameState.currentIndex = 0;
+    showScreen('reveal');
+    setupTurn();
 }

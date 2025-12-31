@@ -12,3 +12,14 @@
 /* Fix para iPhone de que los botones no se sientan lentos */
 button { cursor: pointer; touch-action: manipulation; }
 input { -webkit-appearance: none; border-radius: 0; }
+
+input[type="checkbox"] {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(15, 23, 42, 0.8);
+    transition: all 0.2s;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #06b6d4;
+    border-color: #06b6d4;
+}

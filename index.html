@@ -34,19 +34,28 @@
         <div id="names-container" class="space-y-3 mb-8"></div>
 
         <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">2. Impostores</h3>
-        <div class="glass p-5 rounded-3xl space-y-5 border border-white/10 mb-8 shadow-xl">
-            <div class="flex items-center justify-between">
-                <span class="text-sm italic uppercase text-[10px]">N° máximo</span>
-                <div class="flex items-center gap-4 scale-90">
-                    <button onclick="changeVal('impostors', -1)" class="stepper-btn text-red-400">-</button>
-                    <span id="v-impostors" class="text-xl font-black w-4 text-center text-cyan-400">1</span>
-                    <button onclick="changeVal('impostors', 1)" class="stepper-btn text-green-400">+</button>
-                </div>
-            </div>
-            <label class="flex items-center justify-between cursor-pointer"><span class="text-xs text-slate-300 italic">¿Cantidad aleatoria por ronda?</span><input type="checkbox" id="check-random" class="w-6 h-6 rounded-lg accent-cyan-500"></label>
-            <label class="flex items-center justify-between cursor-pointer"><span class="text-xs text-slate-300">Mostrar cuántos hay al inicio</span><input type="checkbox" id="check-show-count" checked class="w-6 h-6 rounded-lg accent-cyan-500"></label>
-            <label class="flex items-center justify-between cursor-pointer border-t border-white/5 pt-4 text-pink-400"><span class="text-xs font-bold uppercase">Pista para Impostor</span><input type="checkbox" id="check-clue" class="w-6 h-6 rounded-lg accent-pink-500"></label>
+<div class="glass p-5 rounded-3xl space-y-5 border border-white/10 mb-8 shadow-xl">
+    <div class="flex items-center justify-between">
+        <span class="text-sm italic uppercase text-[10px]">N° máximo</span>
+        <div class="flex items-center gap-4 scale-90">
+            <button onclick="changeVal('impostors', -1)" class="stepper-btn text-red-400">-</button>
+            <span id="v-impostors" class="text-xl font-black w-4 text-center text-cyan-400">1</span>
+            <button onclick="changeVal('impostors', 1)" class="stepper-btn text-green-400">+</button>
         </div>
+    </div>
+    <label class="flex items-center justify-between cursor-pointer">
+        <span class="text-xs text-slate-300 italic">¿Cantidad aleatoria por ronda?</span>
+        <input type="checkbox" id="check-random" class="w-6 h-6 rounded-lg bg-slate-800 border-2 border-white/20 accent-cyan-500 appearance-none checked:appearance-auto">
+    </label>
+    <label class="flex items-center justify-between cursor-pointer">
+        <span class="text-xs text-slate-300">Mostrar cuántos hay al inicio</span>
+        <input type="checkbox" id="check-show-count" checked class="w-6 h-6 rounded-lg bg-slate-800 border-2 border-white/20 accent-cyan-500 appearance-none checked:appearance-auto">
+    </label>
+    <label class="flex items-center justify-between cursor-pointer border-t border-white/5 pt-4 text-pink-400">
+        <span class="text-xs font-bold uppercase">Pista para Impostor</span>
+        <input type="checkbox" id="check-clue" class="w-6 h-6 rounded-lg bg-slate-800 border-2 border-pink-500/30 accent-pink-500 appearance-none checked:appearance-auto">
+    </label>
+</div>
 
         <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">3. Duración (Rondas)</h3>
         <div class="glass p-4 rounded-3xl border border-white/10 flex items-center justify-between mb-8 shadow-xl">
