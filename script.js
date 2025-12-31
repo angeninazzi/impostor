@@ -196,53 +196,45 @@ function processResults() {
 }
 
 
+// ... (Todo lo anterior igual hasta llegar a handlePostResult)
+
 function handlePostResult() {
     const btnText = document.getElementById('btn-next-action').innerText;
     
     if (btnText === "Nueva Partida") {
-        // En lugar de recargar la página, reiniciamos el juego con los mismos nombres
-        resetAndPlayAgain();
+        // Obtenemos los nombres de los jugadores de la partida anterior
+        const currentNames = gameState.players.map(p => p.name);
+        // Reiniciamos todo el estado
+        gameState = { 
+            players: [], 
+            currentIndex: 0, 
+            secretWord: "", 
+            votes: {}, 
+            totalVotesCast: 0, 
+            actualImpsCount: 0 
+        };
+        // Iniciamos el proceso de sorteo con los mismos nombres
+        repartirNuevosRoles(currentNames);
     } else {
-        // "Próxima Ronda" dentro de la misma partida (alguien murió pero el juego sigue)
+        // "Próxima Ronda" (el juego sigue porque no ganaron todavía)
         const alive = gameState.players.filter(p => p.alive);
         document.getElementById('starter-name').innerText = alive[Math.floor(Math.random() * alive.length)].name;
         showScreen('lobby');
     }
 }
 
-function resetAndPlayAgain() {
-    // 1. Obtenemos los nombres actuales de los objetos de jugadores (vivos o muertos)
-    const currentNames = gameState.players.map(p => p.name);
-    
-    // 2. Limpiamos el estado del juego pero preservamos la configuración
-    gameState = { 
-        players: [], 
-        currentIndex: 0, 
-        secretWord: "", 
-        votes: {}, 
-        totalVotesCast: 0, 
-        actualImpsCount: 0 
-    };
-
-    // 3. Volvemos a ejecutar la lógica de inicio (sorteo de palabra y roles)
-    // Para esto, usamos los nombres que ya teníamos
-    repartirNuevosRoles(currentNames);
-}
-
 function repartirNuevosRoles(names) {
-    // Seleccionamos temas activos
+    // 1. Seleccionar nueva palabra
     const themes = Array.from(document.querySelectorAll('.category-chip.active')).map(b => b.innerText);
     let pool = themes.flatMap(t => DICCIONARIO[t]);
     if(DICCIONARIO["Custom"].length > 0) pool = [...pool, ...DICCIONARIO["Custom"]];
-    
-    // Sorteo de palabra
     gameState.secretWord = pool[Math.floor(Math.random() * pool.length)];
     
-    // Cantidad de impostores
+    // 2. Definir cantidad de impostores
     gameState.actualImpsCount = document.getElementById('check-random').checked ? 
         Math.floor(Math.random() * config.impostors) + 1 : config.impostors;
     
-    // Mapeo de jugadores y roles
+    // 3. Crear lista de jugadores y asignar roles
     gameState.players = names.map(n => ({ name: n, role: 'citizen', alive: true }));
     let assigned = 0;
     while(assigned < gameState.actualImpsCount) {
@@ -253,14 +245,16 @@ function repartirNuevosRoles(names) {
         }
     }
 
-    // Alerta de impostores
+    // 4. Mostrar alerta de cantidad si está activo
     const alertBox = document.getElementById('total-imps-alert');
     if(document.getElementById('check-show-count').checked) {
         alertBox.innerText = `ATENCIÓN: HAY ${gameState.actualImpsCount} IMPOSTOR(ES)`;
         alertBox.classList.remove('hidden');
+    } else {
+        alertBox.classList.add('hidden');
     }
 
-    // Ir a la pantalla de revelación
+    // 5. Ir a revelar
     gameState.currentIndex = 0;
     showScreen('reveal');
     setupTurn();
